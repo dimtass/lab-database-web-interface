@@ -1,0 +1,26 @@
+# Description:
+#   This file is meant to be used only with the Dockerfile in this
+#   folder: docker-lighttpd-php7.4-sqlite3/
+#   This will load a container and will replace the default configuration
+#   files. First you need to build the image.
+#
+# To build:
+#   docker build -t lighttpd-server docker-lighttpd-php7.4-sqlite3/
+#
+# To run:
+#   docker-compose up
+#
+# To attach:
+#   docker-compose exec webserver /bin/sh
+
+version: '3'
+services:
+    webserver:
+        image: lighttpd-server
+        volumes:
+            - ./www/lab:/var/www/html/lab
+            - ./www/lighttpd.conf:/etc/lighttpd/lighttpd.conf
+            - ./www/php.ini:/usr/local/etc/php/php.ini
+            - ./www/root_profile:/etc/profile
+        ports:
+            - "80:80"

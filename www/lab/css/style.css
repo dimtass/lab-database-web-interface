@@ -1,0 +1,61 @@
+* {margin: 0; padding: 0;}
+
+body {
+    background-image: url("background.png");
+    background-repeat: no-repeat;
+	background-color: #F0F0F0;
+} 
+
+div {
+    margin-left: auto;
+    margin-right: auto;
+    width: 70%;
+}
+
+#search #uploadform #add_part {
+  float: left;
+  margin: 0 15px 0 0;
+}
+ 
+ul {
+  list-style-type: none;
+  width: 600px;
+}
+ 
+h2 {
+  font: bold 15px/1.5 Helvetica, Verdana, sans-serif;
+}
+ 
+li img {
+  float: left;
+  margin: 0 15px 0 0;
+  max-height: 80px;
+  max-width: 80px;
+}
+ 
+li p {
+  font: 200 12px/1.5 Georgia, Times New Roman, serif;
+}
+ 
+li {
+    border: 1px solid;
+    border-radius: 5px;
+	padding: 10px;
+	overflow: auto;
+	background-image: -o-linear-gradient(bottom, #DEDEDE 29%, #FFFFFF 100%);
+	background-image: -moz-linear-gradient(bottom, #DEDEDE 29%, #FFFFFF 100%);
+	background-image: -webkit-linear-gradient(bottom, #DEDEDE 29%, #FFFFFF 100%);
+	background-image: -ms-linear-gradient(bottom, #DEDEDE 29%, #FFFFFF 100%);
+	background-image: linear-gradient(to bottom, #DEDEDE 29%, #FFFFFF 100%);
+}
+ 
+li:hover {
+  background: #eee;
+  cursor: pointer;
+}
+
+.pdf {
+	float: right;
+  margin: 0 15px 0 0;
+  max-height: 25px;
+}

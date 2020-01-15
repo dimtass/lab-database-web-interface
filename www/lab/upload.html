@@ -1,0 +1,51 @@
+<!--
+    Upload functionality for the main web interface. There is a blog on how to use this
+    in here: https://www.stupid-projects.com/component-database-with-led-indicators/
+
+    Author: Dimitris Tassopoulos <dimtass@gmail.com>
+-->
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<link rel="icon" type="image/png" href="images/icon.png">
+	<title>Add new item in the database</title>
+	<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div>
+<br><br>
+<h2 id="uploadform">Add a new part:</h2>
+<br>
+<p>
+    To add a new part in the database you need to add at least<br>
+    the 'Part name'. Additionally, you can add a description,<br>
+    which is also shown in the items list and add additional<br>
+    tags in the 'Tags' field, which are used from the search<br>
+    function in the main page. Use the 'Choose File' buttons<br>
+    to upload an image and the datasheet of the part.<br>
+    <br>
+    If you're also using the esp8266 firmware for indicating<br>
+    the part location, then add the led index of the WS2812B<br>
+    stripe.<br>
+</p>
+<br>
+<form action="upload.php" method="post" id="uploadform" enctype="multipart/form-data">
+  Part name: <input type="text" name="partName"><br>
+  Part Description: <input type="text" name="partDescription"><br>
+  Manufacturer: <input type="text" name="partManufacturer"><br>
+  Quantity: <input type="text" name="partQty"><br>
+  Tags: <input type="text" name="partTags"><br>
+  Location: <input type="text" name="partLocation"><br>
+  Image file: <input type="file" name="partImage"><br>
+  Datasheet: <input type="file" name="partDatasheet"><br>
+  <br>
+  <input type="submit" name="submit" value="Add part to database">
+</form>
+<br>
+<p><button onclick="window.location.href = './index.php';">Cancel</button></p>
+</div>
+
+</body>
+</html>
