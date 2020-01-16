@@ -15,11 +15,12 @@
     <script type="text/javascript" src="js/jquery.fancybox.min.js"></script>
 
     <script type="text/javascript">
+    var esp8266ip = "";
     $(document).ready(function() {
         <?php
             $file = fopen("ESP8266IP.txt", "r") or die('Unable to open the ESP8266IP.txt file');
             $ip = fgets($file);
-            echo 'var esp8266ip = "' . $ip . '";';
+            echo 'esp8266ip = "' . $ip . '";';
             fclose($file);
         ?>
 
