@@ -167,6 +167,7 @@ void setup() {
     rest.set_name("esp8266");
 
     // Connect to WiFi
+    WiFi.mode(WIFI_STA);
     WiFi.begin(config.ssid, config.ssid_password);
     while (WiFi.status() != WL_CONNECTED) {
         delay(500);
