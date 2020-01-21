@@ -2,6 +2,9 @@
 #include <EEPROM.h>
 #include <ESP8266WiFi.h>
 #include <aREST.h>
+#define FASTLED_ESP8266_DMA
+// #define FASTLED_ALLOW_INTERRUPTS 0
+#define FASTLED_INTERNAL
 #define FASTLED_ESP8266_RAW_PIN_ORDER
 #include <FastLED.h>
 #include "Ticker.h"
@@ -20,8 +23,8 @@ enum en_eeprom_versions {
 #define DEF_LED_ON_TIMEOUT_MS   5000
 #define DEF_CRC_POLY            0xFFFF
 #define RESET_TO_DEF_PIN        5   // D1 on nodemcu esp8266
-char * def_ssid = "";
-char * def_ssid_password = "";
+char * def_ssid = "DTLB";
+char * def_ssid_password = "RTFMYFM78";
 CRGB def_led_on_color = CRGB::White;
 CRGB def_led_off_color = CRGB::Black;
 
@@ -31,8 +34,8 @@ CRGB def_led_off_color = CRGB::Black;
 #define STRIPE_COLOR_ORDER GRB
 #define NUM_LEDS    100
 
-#define BRIGHTNESS  200
-#define FRAMES_PER_SECOND 60
+#define BRIGHTNESS  255
+#define FRAMES_PER_SECOND 1
 
 // Create aREST instance
 aREST rest = aREST();
@@ -91,7 +94,7 @@ void load_default_configuration(struct tp_config * cfg)
     cfg->led_on_color = def_led_on_color;
     cfg->led_off_color = def_led_off_color;
     cfg->led_on_timeout = DEF_LED_ON_TIMEOUT_MS;
-    cfg->led_background = CRGB::LightBlue;
+    cfg->led_background = CRGB::Red;
     cfg->enable_background = 0;
     cfg->crc = crc16((uint8_t*)cfg, sizeof(struct tp_config) - sizeof(uint16_t), DEF_CRC_POLY);
     printf("Calculated CRC16: 0x%04X\n", cfg->crc);
@@ -168,6 +171,7 @@ void setup() {
 
     // Connect to WiFi
     WiFi.mode(WIFI_STA);
+    // WiFi.setOutputPower(12.5);
     WiFi.begin(config.ssid, config.ssid_password);
     while (WiFi.status() != WL_CONNECTED) {
         delay(500);
@@ -264,7 +268,7 @@ ICACHE_RAM_ATTR int restapi_led_control(String command)
 ICACHE_RAM_ATTR int restapi_led_on_color(String command)
 {
     config.led_on_color = command.toInt();
-    printf("[aREST] setting LED on color to: %d", (int) config.led_on_color);
+    printf("[aREST] setting LED on color to: %d\n", (int) config.led_on_color);
     save_to_eeprom = true;
     return 0;
 }
@@ -272,7 +276,7 @@ ICACHE_RAM_ATTR int restapi_led_on_color(String command)
 ICACHE_RAM_ATTR int restapi_led_off_color(String command)
 {
     config.led_off_color = command.toInt();
-    printf("[aREST] setting LED off color to: %d", (int) config.led_off_color);
+    printf("[aREST] setting LED off color to: %d\n", (int) config.led_off_color);
     save_to_eeprom = true;
     return 0;
 }
@@ -280,7 +284,7 @@ ICACHE_RAM_ATTR int restapi_led_off_color(String command)
 ICACHE_RAM_ATTR int restapi_led_on_timeout(String command)
 {
     config.led_on_timeout = command.toInt();
-    printf("[aREST] setting LED on timeout to: %d", (int) config.led_on_timeout);
+    printf("[aREST] setting LED on timeout to: %d\n", (int) config.led_on_timeout);
     save_to_eeprom = true;
     return 0;
 }
@@ -288,8 +292,16 @@ ICACHE_RAM_ATTR int restapi_led_on_timeout(String command)
 ICACHE_RAM_ATTR int restapi_led_background(String command)
 {
     config.led_background = command.toInt();
-    printf("[aREST] setting LED background to: %d", (int) config.led_background);
+    printf("[aREST] setting LED background to: %d\n", (int) config.led_background);
     save_to_eeprom = true;
+
+    // Update color
+    if (config.enable_background) {
+        for (int i=0; i<NUM_LEDS; i++) {
+            leds[i] = config.led_background;;
+        }
+        FastLED.show();
+    }
     return 0;
 }
 
@@ -298,7 +310,7 @@ ICACHE_RAM_ATTR int restapi_enable_background(String command)
     CRGB color = CRGB::Black;
 
     config.enable_background = command.toInt();
-    printf("[aREST] Enabling LED background: %d", (int) config.enable_background);
+    printf("[aREST] Enabling LED background: %d\n", (int) config.enable_background);
 
     if (config.enable_background) {
         color = config.led_background;
