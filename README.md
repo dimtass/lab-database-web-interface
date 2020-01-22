@@ -58,8 +58,8 @@ led_index | The index of the LED to turn ON
 led_on_color | The integer value of the CRGB color for ON
 led_off_color | The integer value of the CRGB color for OFF
 led_on_timeout | The integer value of the LED timeout in seconds
-led_background | The integer value of the CRGB color for the background mode
-enable_background | Enables/disables the background mode
+led_ambient | The integer value of the CRGB color for the ambient mode
+enable_ambient | Enables/disables the ambient mode
 wifi_ssid | The WiFi SSIDwifi_passwordThe WiFi password
 
 The color CRGB values can be calculated by converting the
@@ -84,19 +84,19 @@ http://192.168.0.42/led_on_color?params=8900331
 
 Similarly, you can execute any spported command.
 
-#### Background mode
-When background mode is enabled then all the LEDs in the strip
-are lit permanately with the color defined in the the `led_background`
+#### ambient mode
+When ambient mode is enabled then all the LEDs in the strip
+are lit permanately with the color defined in the the `led_ambient`
 aREST variable. Assuming that the ESP8266 IP address is
-`192.168.0.42`, then to enable the background mode, open a web
+`192.168.0.42`, then to enable the ambient mode, open a web
 browser and enter this url:
 ```
-http://192.168.0.42/enable_background?params=1
+http://192.168.0.42/enable_ambient?params=1
 ```
 
 And to disable it:
 ```
-http://192.168.0.42/enable_background?params=0
+http://192.168.0.42/enable_ambient?params=0
 ```
 
 ## Install SQLite browser

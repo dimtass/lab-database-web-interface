@@ -35,9 +35,23 @@
         });
 
     });
-
+    // This will turn on a single LED on
     function turn_on_led(index) {
         $.post( "http://" + esp8266ip + "/led_index?params=" + index, function( data ) {
+            $(".rest_reply" ).html( data );
+        });
+    }
+    // This will set the ambient color
+    function ambient_color() {
+        var color = parseInt('0x' + document.getElementById("ambient_color").value.replace('#', ''), 16);
+        // alert('color: ' + color);
+        $.post( "http://" + esp8266ip + "/led_ambient?params=" + color, function( data ) {
+            $(".rest_reply" ).html( data );
+        });
+    }
+    // This will turn on/off the ambient color
+    function ambient_light(onoff) {
+        $.post( "http://" + esp8266ip + "/enable_ambient?params=" + onoff, function( data ) {
             $(".rest_reply" ).html( data );
         });
     }
@@ -53,7 +67,13 @@
     <input type="submit" name="submit" value="Search">
 </form>
 <br>
-<p id="add_part"><button onclick="window.location.href = './upload.html';">Add new part</button></p>
+<p id="extra_functions">
+    Extra functions:<br>
+    <button onclick="window.location.href = './upload.html';">Add new part</button>
+    <button onclick="ambient_light(1)">Enable ambient</button>
+    <button onclick="ambient_light(0)">Disable ambient</button>
+    <input oninput="ambient_color()" type="color" id="ambient_color" name="ambient_color" value="#ffffff">
+</p>
 </div>
 <div id="div_parts_list">
     <ul id="parts">

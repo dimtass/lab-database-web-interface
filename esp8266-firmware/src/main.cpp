@@ -50,8 +50,8 @@ struct tp_config {
     CRGB        led_on_color;
     CRGB        led_off_color;
     int         led_on_timeout;
-    CRGB        led_background;
-    uint8_t     enable_background;
+    CRGB        led_ambient;
+    uint8_t     enable_ambient;
     uint16_t    crc;
 };
 struct tp_config config;
@@ -77,8 +77,8 @@ int restapi_led_off_color(String command);
 int restapi_led_on_timeout(String command);
 int restapi_wifi_ssid(String command);
 int restapi_wifi_password(String command);
-int restapi_led_background(String command);
-int restapi_enable_background(String command);
+int restapi_led_ambient(String command);
+int restapi_enable_ambient(String command);
 
 void load_default_configuration(struct tp_config * cfg)
 {
@@ -94,8 +94,8 @@ void load_default_configuration(struct tp_config * cfg)
     cfg->led_on_color = def_led_on_color;
     cfg->led_off_color = def_led_off_color;
     cfg->led_on_timeout = DEF_LED_ON_TIMEOUT_MS;
-    cfg->led_background = CRGB::Red;
-    cfg->enable_background = 0;
+    cfg->led_ambient = CRGB::Red;
+    cfg->enable_ambient = 0;
     cfg->crc = crc16((uint8_t*)cfg, sizeof(struct tp_config) - sizeof(uint16_t), DEF_CRC_POLY);
     printf("Calculated CRC16: 0x%04X\n", cfg->crc);
 }
@@ -152,16 +152,16 @@ void setup() {
     rest.function("led_on_color", restapi_led_on_color);
     rest.function("led_off_color", restapi_led_off_color);
     rest.function("led_on_timeout", restapi_led_on_timeout);
-    rest.function("led_background", restapi_led_background);
-    rest.function("enable_background", restapi_enable_background);
+    rest.function("led_ambient", restapi_led_ambient);
+    rest.function("enable_ambient", restapi_enable_ambient);
     rest.function("wifi_ssid", restapi_wifi_ssid);
     rest.function("wifi_password", restapi_wifi_password);
     // aREST variables
     rest.variable("led_on_color", &config.led_on_color);
     rest.variable("led_off_color", &config.led_off_color);
     rest.variable("led_on_timeout", &config.led_on_timeout);
-    rest.variable("led_background", &config.led_background);
-    rest.variable("enable_background", &config.enable_background);
+    rest.variable("led_ambient", &config.led_ambient);
+    rest.variable("enable_ambient", &config.enable_ambient);
     rest.variable("wifi_ssid", &config.ssid);
     rest.variable("wifi_password",&config.ssid_password);
 
@@ -289,31 +289,31 @@ ICACHE_RAM_ATTR int restapi_led_on_timeout(String command)
     return 0;
 }
 
-ICACHE_RAM_ATTR int restapi_led_background(String command)
+ICACHE_RAM_ATTR int restapi_led_ambient(String command)
 {
-    config.led_background = command.toInt();
-    printf("[aREST] setting LED background to: %d\n", (int) config.led_background);
+    config.led_ambient = command.toInt();
+    printf("[aREST] setting LED ambient to: %d\n", (int) config.led_ambient);
     save_to_eeprom = true;
 
     // Update color
-    if (config.enable_background) {
+    if (config.enable_ambient) {
         for (int i=0; i<NUM_LEDS; i++) {
-            leds[i] = config.led_background;;
+            leds[i] = config.led_ambient;;
         }
         FastLED.show();
     }
     return 0;
 }
 
-ICACHE_RAM_ATTR int restapi_enable_background(String command)
+ICACHE_RAM_ATTR int restapi_enable_ambient(String command)
 {
     CRGB color = CRGB::Black;
 
-    config.enable_background = command.toInt();
-    printf("[aREST] Enabling LED background: %d\n", (int) config.enable_background);
+    config.enable_ambient = command.toInt();
+    printf("[aREST] Enabling LED ambient: %d\n", (int) config.enable_ambient);
 
-    if (config.enable_background) {
-        color = config.led_background;
+    if (config.enable_ambient) {
+        color = config.led_ambient;
     }
     for (int i=0; i<NUM_LEDS; i++) {
         leds[i] = color;
