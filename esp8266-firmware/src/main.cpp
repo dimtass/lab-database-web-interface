@@ -78,6 +78,7 @@ int restapi_led_on_timeout(String command);
 int restapi_wifi_ssid(String command);
 int restapi_wifi_password(String command);
 int restapi_led_ambient(String command);
+int restapi_save_led_ambient(String command);
 int restapi_enable_ambient(String command);
 
 void load_default_configuration(struct tp_config * cfg)
@@ -153,6 +154,7 @@ void setup() {
     rest.function("led_off_color", restapi_led_off_color);
     rest.function("led_on_timeout", restapi_led_on_timeout);
     rest.function("led_ambient", restapi_led_ambient);
+    rest.function("save_led_ambient", restapi_save_led_ambient);
     rest.function("enable_ambient", restapi_enable_ambient);
     rest.function("wifi_ssid", restapi_wifi_ssid);
     rest.function("wifi_password", restapi_wifi_password);
@@ -289,7 +291,7 @@ ICACHE_RAM_ATTR int restapi_led_on_timeout(String command)
     return 0;
 }
 
-ICACHE_RAM_ATTR int restapi_led_ambient(String command)
+ICACHE_RAM_ATTR int restapi_save_led_ambient(String command)
 {
     config.led_ambient = command.toInt();
     printf("[aREST] setting LED ambient to: %d\n", (int) config.led_ambient);
@@ -304,6 +306,20 @@ ICACHE_RAM_ATTR int restapi_led_ambient(String command)
     }
     return 0;
 }
+
+ICACHE_RAM_ATTR int restapi_led_ambient(String command)
+{
+    CRGB color = command.toInt();
+    // Update color
+    if (config.enable_ambient) {
+        for (int i=0; i<NUM_LEDS; i++) {
+            leds[i] = color;
+        }
+        FastLED.show();
+    }
+    return 0;
+}
+
 
 ICACHE_RAM_ATTR int restapi_enable_ambient(String command)
 {
