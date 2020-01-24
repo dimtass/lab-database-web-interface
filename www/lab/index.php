@@ -118,11 +118,15 @@
                 }
                 echo '<li><a data-fancybox="gallery" data-caption="'.$img_caption.'" href="./images/'.$img_name.'"><img src="./thumbs/'.$img_name.'" alt="" /></a>';
                 echo '<h2>'.$row['Part'].'</h2>';
-                echo '<p>'.$row['Description'].'</p></a>';
+                echo '<p>'.$row['Description'].'</p>';
+                if (!empty($row['Location']) && !is_numeric($row['Location'])) {
+                    echo '<p>Location: '.$row['Location'].'</p>';
+                }
+                echo '</a>';
                 if (!empty($row['Datasheet'])) {
                     echo '<a href="./datasheets/'.$row['Datasheet'].'"><img class="pdf" src="./images/pdf.png"/></a>';
                 }
-                if (!empty($row['Location']) && $ip) {
+                if (!empty($row['Location']) && $ip && is_numeric($row['Location'])) {
                     echo '<button onclick="turn_on_led(' . $row['Location'] . ')">Show</button>';
                 }
                 echo '</li>';

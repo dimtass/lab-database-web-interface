@@ -99,6 +99,25 @@ And to disable it:
 http://192.168.0.42/enable_ambient?params=0
 ```
 
+#### DB.Location
+The `Location` field of the database table (`tbl_parts`) can be used in two
+different ways:
+
+1. If it's just a number then it represents a LED index on the RGB strip.
+2. If it starts with any letter, then the html web interface, will display
+this information on the item list.
+
+For example, if `Location` is `32` then the web interface will display a
+button, which when it's pressed it will send the `led_index` command with
+that number.
+
+If `Location` is `L32` or `Cabinet 3` or `Drawer 1`, then the web interface
+will display this string in the item list with the `Location:` prefix. So, it
+will became:
+```
+Location: L32
+```
+
 ## Install SQLite browser
 [DB Browser for SQLite](https://sqlitebrowser.org/) is an open source
 browser with a GUI that you can use to edit manually your database.
